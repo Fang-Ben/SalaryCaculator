@@ -1,4 +1,9 @@
 from docs.conf import box_price, accessories_internal, thickness, flat_plat, box_ratio, canopy_ratio, series_name
+import os
+from datetime import datetime
+
+
+file_path, file_name = os.getcwd(), datetime.now().strftime("%d%m%y")
 
 
 # 所有价格预处理和计算单元.
@@ -50,7 +55,6 @@ def additional():
 # price_fic_draw,
 # 10.price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point
 # additional_data是一个二维元组([additional_data],[additional_price])
-# TODO: 附加件项目和价格显示功能有问题
 # TODO: 写入到文件
 def print_():
     order_num = input("请输入订单号:")
@@ -58,39 +62,42 @@ def print_():
     additional_data = additional()
     price_after_fold = sum(data[0:9]) * box_ratio
     price_before_fit = price_after_fold + sum(additional_data[1][:])
-    print("订单号{}折板后价格是${}=(系列价格${}".format(order_num, price_before_fit, data[0]), end="")
-    if data[1] != 0:
-        print("+2.5mm价格${}".format(data[1]), end="")
-    if data[2] != 0:
-        print("+平铝价格${}".format(data[2]), end="")
-    if data[3] != 0:
-        print("+搁板价格${}".format(data[3]), end="")
-    if data[4] != 0:
-        print("+(U槽/圆管/方管)总价${}".format(data[4]), end="")
-    if data[5] != 0:
-        print("+铝网价格${}".format(data[5]), end="")
-    if data[6] != 0:
-        print("+新增门价格${}".format(data[6]), end="")
-    if data[7] != 0:
-        print("+Base价格${}".format(data[7]), end="")
-    if data[8] != 0:
-        print("+内抽价格${}".format(data[8]), end="")
-    if data[9] != 0:
-        print("+FIC抽价格${}".format(data[9]), end="")
-    print(")X0.775", end="")
-    if data[14] != 0:
-        print("+焊接顶架价格${}".format(data[14]), end="")
-    elif data[15] != 0:
-        print("+三点锁价格${}".format(data[15]), end="")
-    price_for_self = data[10] + data[13]
-    if data[10] != 0:
-        print("\tPLUS!!!!!定制{}${},焊工自切自拿".format(data[11], data[10]))
-    elif data[13] != 0:
-        print("\tPLUS!!!!!{}价格${},焊工自切自拿".format(data[12], data[13]))
-    elif additional_data[0] is not None:
-        print("\t附加件有:", end="")
-        for i in additional_data[0]:
-            print(i, end=" ")
+    with open(file_name,  mode='a') as f:
+        print("订单号{}折板后价格是${}=(系列价格${}".format(order_num, price_before_fit, data[0]), end="", file=f)
+        if data[1] != 0:
+            print("+2.5mm价格${}".format(data[1]), end="", file=f)
+        if data[2] != 0:
+            print("+平铝价格${}".format(data[2]), end="", file=f)
+        if data[3] != 0:
+            print("+搁板价格${}".format(data[3]), end="", file=f)
+        if data[4] != 0:
+            print("+(U槽/圆管/方管)总价${}".format(data[4]), end="", file=f)
+        if data[5] != 0:
+            print("+铝网价格${}".format(data[5]), end="", file=f)
+        if data[6] != 0:
+            print("+新增门价格${}".format(data[6]), end="", file=f)
+        if data[7] != 0:
+            print("+Base价格${}".format(data[7]), end="", file=f)
+        if data[8] != 0:
+            print("+内抽价格${}".format(data[8]), end="", file=f)
+        if data[9] != 0:
+            print("+FIC抽价格${}".format(data[9]), end="", file=f)
+        print(")X0.775", end="", file=f)
+        if data[14] != 0:
+            print("+焊接顶架价格${}".format(data[14]), end="", file=f)
+        elif data[15] != 0:
+            print("+三点锁价格${}".format(data[15]), end="", file=f)
+        price_for_self = data[10] + data[13]
+        if data[10] != 0:
+            print("\tPLUS!!!!!定制{}${},焊工自切自拿".format(data[11], data[10]), file=f)
+        elif data[13] != 0:
+            print("\tPLUS!!!!!{}价格${},焊工自切自拿".format(data[12], data[13]), file=f)
+        elif len(additional_data[0]) != 0:
+            print("\t附加件有:", end="", file=f)
+            for i, j in zip(additional_data[0], additional_data[1]):
+                print(i, ":", "$", j, end=" ", file=f)
+        print("\n", file=f)
+        f.close()
     return price_before_fit, price_for_self
 
 
