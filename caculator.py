@@ -67,7 +67,7 @@ def print_():
         price_after_fold = (sum(data[0:9])+data[15]) * box_ratio
     elif data[0] == 0:
         price_after_fold = (data[15]+data[16]+sum(data[1:9])) * canopy_ratio
-    price_before_fit = price_after_fold +data[13]+data[14]+sum(additional_data[1][:])
+    price_before_fit = price_after_fold + data[13]+data[14]+sum(additional_data[1][:])
     with open(file_name,  mode='a') as f:
         if data[0] != 0:
             print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, price_before_fit, data[17], data[0]), end="", file=f)
