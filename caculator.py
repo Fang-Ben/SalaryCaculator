@@ -1,4 +1,5 @@
-from docs.conf import box_price, accessories_internal, thickness, flat_plat, box_ratio, canopy_ratio, series_name
+from docs.conf import box_price, accessories_internal, thickness, flat_plat, box_ratio, canopy_ratio, series_name, \
+    canopy_price, special_name1, special_name2, special_name3, init_divider, init_door, canopy_name
 import os
 from datetime import datetime
 
@@ -10,22 +11,26 @@ file_path, file_name = os.getcwd(), datetime.now().strftime("%d%m%y")
 def getdata():
     code_data, rr_nj_data = get_code(), rr_nj()
     length_data, price_thick, price_fp = get_length()
-    base_code = code_data[0] + length_data
-    init_divider, init_door, = code_data[2], code_data[1]
+    price_box, price_canopy = 0, 0
+    if code_data[0] in series_name:
+        base_code = code_data[0] + length_data
+        price_box = box_price[base_code]
+    else:
+        base_code = code_data[0]
+        price_canopy = canopy_price[base_code]
+    divider_init, door_init, = code_data[2], code_data[1]
     price_rr, rr_name, price_nj, nj_name = rr_nj_data[0], rr_nj_data[1], rr_nj_data[2], rr_nj_data[3]
-    price_divi = (int(input("请输入隔板数量:")) + init_divider) * accessories_internal["divider"]
+    price_divi = (int(input("请输入隔板数量:")) + divider_init) * accessories_internal["divider"]
     tube_u = (int(input("请输入U槽/方管/圆管数量:"))) * accessories_internal["U"]
     price_mesh = (int(input("请输入铝网数量"))) * accessories_internal["mesh"]
     price_draw = (int(input("请输入内抽数量"))) * accessories_internal["door"]
     price_fic_draw = (int(input("FIC抽数量"))) * accessories_internal["fic_draw"]
-    price_door = (int(input("请输入新增门数的数量")) + init_door) * accessories_internal["door"]
+    price_door = (int(input("请输入新增门数的数量")) + door_init) * accessories_internal["door"]
     price_weld_rr = (int(input("请输入焊接标准顶架数量"))) * accessories_internal["weld_rr"]
     price_3_point = (int(input("请输入3点(中控)锁数量"))) * accessories_internal["3_point"]
     price_base = (int(input("请输入base数量"))) * accessories_internal["base"]
-    # print(box_price[base_code], price_divi, tube_u, price_mesh, price_door, price_rr, price_weld_rr, price_3_point,
-    #       price_base, price_draw, price_fic_draw, price_thick, price_fp)
-    return box_price[base_code], price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_base, \
-        price_draw, price_fic_draw, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point
+    return price_box, price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_base, price_draw, \
+        price_fic_draw, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy, base_code
 
 
 # 厚度和平铝计算
@@ -51,19 +56,23 @@ def additional():
     return additional_data, additional_price
 
 
-# box_price[base_code], price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_base, price_draw,
+# price_box, price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_base, price_draw,
 # price_fic_draw,
-# 10.price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point
+# 10.price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy
 # additional_data是一个二维元组([additional_data],[additional_price])
-# TODO: 写入到文件
 def print_():
     order_num = input("请输入订单号:")
-    data = getdata()
-    additional_data = additional()
-    price_after_fold = sum(data[0:9]) * box_ratio
-    price_before_fit = price_after_fold + sum(additional_data[1][:])
+    data, additional_data, price_after_fold = getdata(), additional(), 0
+    if data[0] != 0:
+        price_after_fold = (sum(data[0:9])+data[15]) * box_ratio
+    elif data[0] == 0:
+        price_after_fold = (data[15]+data[16]+sum(data[1:9])) * canopy_ratio
+    price_before_fit = price_after_fold +data[13]+data[14]+sum(additional_data[1][:])
     with open(file_name,  mode='a') as f:
-        print("订单号{}折板后价格是${}=(系列价格${}".format(order_num, price_before_fit, data[0]), end="", file=f)
+        if data[0] != 0:
+            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, price_before_fit, data[17], data[0]), end="", file=f)
+        else:
+            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, price_before_fit, data[17], data[16]), end="", file=f)
         if data[1] != 0:
             print("+2.5mm价格${}".format(data[1]), end="", file=f)
         if data[2] != 0:
@@ -82,23 +91,26 @@ def print_():
             print("+内抽价格${}".format(data[8]), end="", file=f)
         if data[9] != 0:
             print("+FIC抽价格${}".format(data[9]), end="", file=f)
-        print(")X0.775", end="", file=f)
+        if data[0] != 0:
+            print(")X0.775", end="", file=f)
+        else:
+            print(")X0.925", end="", file=f)
         if data[14] != 0:
             print("+焊接顶架价格${}".format(data[14]), end="", file=f)
-        elif data[15] != 0:
+        if data[15] != 0:
             print("+三点锁价格${}".format(data[15]), end="", file=f)
         price_for_self = data[10] + data[13]
         if data[10] != 0:
             print("\tPLUS!!!!!定制{}${},焊工自切自拿".format(data[11], data[10]), file=f)
-        elif data[13] != 0:
+        if data[13] != 0:
             print("\tPLUS!!!!!{}价格${},焊工自切自拿".format(data[12], data[13]), file=f)
-        elif len(additional_data[0]) != 0:
+        if len(additional_data[0]) != 0:
             print("\t附加件有:", end="", file=f)
             for i, j in zip(additional_data[0], additional_data[1]):
                 print(i, ":", "$", j, end=" ", file=f)
         print("\n", file=f)
         f.close()
-    return price_before_fit, price_for_self
+    return price_before_fit, price_for_self, data[10]
 
 
 # 通过输入长度自动生成标准box_price中的格式
@@ -108,34 +120,36 @@ def print_():
 def get_code():
     while True:
         series_code = input("清输入型号")
-        if series_code in series_name:
+        if series_code in series_name or canopy_name:
             break
         else:
             print("输入的型号不在列表中,请核实后再次输入!")
-    init_door, init_divider, code = 0, 0, ""
-    if series_code == "DBL" or "FID" or "DBU":
-        init_door = 1
-    if series_code == "FID" or "DBU" or "TSO":
-        init_divider = -1
-    if series_code == "FID" or "FIS":
+    door_init, divider_init, code = 0, 0, series_code
+    if series_code in init_door:
+        door_init = 1
+    if series_code in init_divider:
+        divider_init = -1
+    if series_code in special_name1:
         code = "FIL"
-    if series_code == "DBL":
+    elif series_code in special_name2:
         code = "REC"
-    if series_code == "DBU":
+    elif series_code in special_name3:
         code = "STS"
-    return code, init_door, init_divider
+    else:
+        code = series_code
+    return code, door_init, divider_init
 
 
 # 根据输入的长度格式化为系统规定的长度显示.并且自动计算出材料种类和厚度价格的变化
 def get_length():
-    length = input("请输入长度")
-    if int(length) <= 1200:
+    length_input = input("请输入长度")
+    if int(length_input) <= 1200:
         length = str(1200)
-    elif 1200 < int(length) <= 1500:
+    elif 1200 < int(length_input) <= 1500:
         length = str(1500)
-    elif 1500 < int(length) <= 1800:
+    elif 1500 < int(length_input) <= 1800:
         length = str(1800)
-    elif 1800 < int(length) <= 2000:
+    elif 1800 < int(length_input) <= 2000:
         length = str(2000)
     else:
         length = str(2001)
@@ -144,7 +158,7 @@ def get_length():
     fp_data = input("是平铝吗?y/n")
     if thick_data == "y":
         price_thick = thickness[length]
-    elif fp_data == "y":
+    # if fp_data == "y":
         price_fp = flat_plat[length]
     return length, price_thick, price_fp
 
@@ -174,3 +188,5 @@ def rr_nj():
             price_nj, nj_name = 5 * num, "牛角"
     return price_rr, rr_name, price_nj, nj_name
 
+if __name__ == "__main__":
+    print_()
