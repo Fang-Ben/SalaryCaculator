@@ -23,7 +23,7 @@ def getdata():
     price_divi = (int(input("请输入隔板数量:")) + divider_init) * accessories_internal["divider"]
     tube_u = (int(input("请输入U槽/方管/圆管数量:"))) * accessories_internal["U"]
     price_mesh = (int(input("请输入铝网数量"))) * accessories_internal["mesh"]
-    price_draw = (int(input("请输入内抽数量"))) * accessories_internal["door"]
+    price_draw = (int(input("请输入内抽数量"))) * accessories_internal["draw"]
     price_fic_draw = (int(input("FIC抽数量"))) * accessories_internal["fic_draw"]
     price_door = (int(input("请输入新增门数的数量")) + door_init) * accessories_internal["door"]
     price_weld_rr = (int(input("请输入焊接标准顶架数量"))) * accessories_internal["weld_rr"]
@@ -70,9 +70,11 @@ def print_():
     price_before_fit = price_after_fold + data[13]+data[14]+sum(additional_data[1][:])
     with open(file_name,  mode='a') as f:
         if data[0] != 0:
-            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, price_before_fit, data[17], data[0]), end="", file=f)
+            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, round(price_before_fit, 3), data[17], data[0]),
+                  end="", file=f)
         else:
-            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, price_before_fit, data[17], data[16]), end="", file=f)
+            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, round(price_before_fit, 3), data[17], data[16]),
+                  end="", file=f)
         if data[1] != 0:
             print("+2.5mm价格${}".format(data[1]), end="", file=f)
         if data[2] != 0:
@@ -110,12 +112,12 @@ def print_():
                 print(i, ":", "$", j, end=" ", file=f)
         print("\n", file=f)
         f.close()
-    return price_before_fit, price_for_self, data[10]
+    return price_before_fit, price_for_self
 
 
 # 通过输入长度自动生成标准box_price中的格式
 # 判断输入为DBL,FID,DBU自动按照双门计算.
-# 判断输入为"FID" or "DBU" or "TSO"时 门的初始化+1
+# 判断输入为"FID" or "DBU" or "TSO"时 隔板初始化-1
 # 判断输入为"UTTI" or "UTTE" or "TB"时 撑杆初始化-2
 def get_code():
     while True:
@@ -188,5 +190,3 @@ def rr_nj():
             price_nj, nj_name = 5 * num, "牛角"
     return price_rr, rr_name, price_nj, nj_name
 
-if __name__ == "__main__":
-    print_()
