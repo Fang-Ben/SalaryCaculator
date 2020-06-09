@@ -7,7 +7,7 @@ box_price = {"REC1200": 40, "REC1500": 45, "REC1800": 50, "REC2000": 60, "REC200
              "UIL1800": 80, "UIL2000": 85, "UIL2001": 105, "ALT1200": 45, "ALT1500": 50, "ALT1800": 60, "ALT2000": 70,
              "ALT2001": 80, "UTS1200": 23, "UTS1500": 27, "UTS1800": 35, "UTS2000": 42, "UTS2001": 50, "UTE1200": 27,
              "UTE1500": 35, "UTE1800": 55, "UTE2000": 60, "UTE2001": 70, "UTTI1200": 50,"UTTI1500": 60, "UTTI1800": 70,
-             "UTTI2000": 80, "UTTI2001": 90}
+             "UTTI200": 80, "UTTI2001": 90}
 canopy_price = {"canopy2": 210, "canopy3": 220, "jo2": 240, "jo": 250}
 accessories_internal = {"divider": 5, "U": 2, "mesh": 10, "tube": 2, "draw": 20, "fic_draw": 30, "corner_cut": 5,
                         "door": 10, "chain": 2, "weld_rr": 20, "3_point": 2, "rubber": 2, "slider": 20, "base": 60}
@@ -17,5 +17,6 @@ init_door, init_divider = ["DBL", "FID", "DBU"], ["FID", "DBU", "TSO"]
 thickness = {"1200": 5, "1500": 9, "1800": 15, "2000": 15, "2001": 15}
 flat_plat = {"1200": 0, "1500": 5, "1800": 10, "2000": 10, "2001": 10}
 box_ratio, canopy_ratio = 0.775, 0.925
-series_name = ["REC", "STS", "FIL", "FIS", "UIS", "DBL", "FID", "DBU", "UIL", "ALT", "UTS", "UTT", "UTE", "TB", "HDF"]
+series_name = ["REC", "STS", "FIL", "FIS", "UIS", "DBL", "FID", "DBU", "UIL", "ALT", "UTS", "UTTI", "UTE", "TB", "HDF",
+               "TSO"]
 canopy_name = ["canopy2", "canopy3", "jo2", "jo3"]
