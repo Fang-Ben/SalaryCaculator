@@ -6,8 +6,9 @@ box_price = {"rec1200": 40, "rec1500": 45, "rec1800": 50, "rec2000": 60, "rec200
              "alt2000": 70, "alt2001": 80, "uts1200": 23, "uts1500": 27, "uts1800": 35, "uts2000": 42, "uts2001": 50, 
              "ute1200": 27, "ute1500": 35, "ute1800": 55, "ute2000": 60, "ute2001": 70, "utti1200": 50, "utti1500": 60, 
              "utti1800": 70, "utti200": 80, "utti2001": 90, "utt1200": 40, "utt1500": 45, "utt1800": 50, "utt2000": 60, 
-             "utt2001": 70, "gb1200": 38, "hdf1200": 10, "shoebox1200": 10, "ljb1200": 105, "ljb1500": 110, "ljb1800": 115,
-             "ljb2000": 120, "ljb2001": 135, "base1200": 60, "base1500": 60, "base1800": 60, "base2000": 60, "base2001": 60}
+             "utt2001": 70, "gb1200": 38, "hdf1200": 10, "shoebox1200": 10, "ljb1200": 105, "ljb1500": 110,
+             "ljb1800": 115, "ljb2000": 120, "ljb2001": 135, "base1200": 60, "base1500": 60, "base1800": 60,
+             "base2000": 60, "base2001": 60, "0": 0}
 canopy_price = {"canopy2": 210, "canopy3": 220, "jo2": 240, "jo3": 250, "wt4": 280, "wt5": 250, "mini": 150, "dog": 150,
                 "nofloor": 150}
 accessories_internal = {"divider": 5, "U": 2, "mesh": 10, "tube": 2, "draw": 20, "fic_draw": 30, "corner_cut": 5,
@@ -19,6 +20,6 @@ init_door, init_divider, init_strut = ["dbl", "fid", "dbu"], ["fid", "dbu", "tso
 thickness = {"1200": 5, "1500": 9, "1800": 15, "2000": 15, "2001": 15}
 flat_plat = {"1200": 0, "1500": 5, "1800": 10, "2000": 10, "2001": 10}
 box_ratio, canopy_ratio = 0.775, 0.925
-series_name = ["rec", "sts", "fil", "fis", "UIS", "dbl", "fid", "dbu", "uil", "alt", "uts", "utti", "ute", "tb", "hdf",
+series_name = ["rec", "sts", "fil", "fis", "uis", "dbl", "fid", "dbu", "uil", "alt", "uts", "utti", "ute", "tb", "hdf",
                "tso", "utt", "ljb", "shoebox"]
 canopy_name = ["canopy2", "canopy3", "jo2", "jo3", "wt4", "wt5", "mini", "dog", "nofloor"]

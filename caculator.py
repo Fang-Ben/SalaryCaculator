@@ -12,7 +12,9 @@ def getdata():
     code_data, rr_nj_data = get_code(), rr_nj()
     length_data, price_thick, price_fp = get_length()
     price_box, price_canopy = 0, 0
-    if code_data[0] in series_name:
+    if code_data[0] == "0":
+        base_code = code_data[0]
+    elif code_data[0] in series_name:
         base_code = code_data[0] + length_data
         price_box = box_price[base_code]
     else:
@@ -70,6 +72,8 @@ def print_():
     data, additional_data, price_after_fold = getdata(), additional(), 0
     if data[0] != 0:
         price_after_fold = (sum(data[0:8])+data[15]+data[18]) * box_ratio
+    elif data[0] ==0 and data[17] == "0":
+        price_after_fold = (sum(data[0:8]) + data[15] + data[18]) * box_ratio
     elif data[0] == 0:
         price_after_fold = (data[18]+data[15]+data[16]+sum(data[1:8])) * canopy_ratio
     price_before_fit = (price_after_fold + data[9] + data[13]+data[14]+sum(additional_data[1][:]))*(1+data[19])
@@ -99,6 +103,8 @@ def print_():
         if data[18] != 0:
             print("撑杆价格${}".format(data[18]), end="", file=f)
         if data[0] != 0:
+            print(")X0.775", end="", file=f)
+        elif data[0] == 0 and data[17] == "0":
             print(")X0.775", end="", file=f)
         else:
             print(")X0.925", end="", file=f)
@@ -130,11 +136,15 @@ def print_():
 # 判断输入为"UTTI" or "UTTE" or "TB"时 撑杆初始化-2
 def get_code():
     while True:
-        series_code = input("清输入型号")
-        if series_code in series_name or canopy_name:
+        series_code = input("*******请输入型号:")
+        if series_code in series_name:
+            break
+        elif series_code == "0":
+            break
+        elif series_code in canopy_name:
             break
         else:
-            print("输入的型号不在列表中,请核实后再次输入!")
+            print("!!!!!!!输入的型号不在列表中,请核实后再次输入!")
     door_init, divider_init, code, strut_init = 0, 0, series_code, 0
     if series_code in init_door:
         door_init = 1
