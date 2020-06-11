@@ -4,8 +4,7 @@ from datetime import datetime
 
 file_path, file_name = os.getcwd(), datetime.now().strftime("%d%m%y")
 
-# TODO: print_里面有两个返回值每次调用print_()函数记得作sum.
-# TODO: 写一个循环,直到输入特殊终止符比如END,终止print_()函数,两个sum的返回值也写入到同一个文件.
+# TODO: 添加容错机制避免中间环节出错不用报警而是再来一变循环,添加输入制作数量(默认是1)
 if __name__ == "__main__":
     print("程序开始")
     price_before_fit, price_for_self = 0, 0
@@ -18,8 +17,16 @@ if __name__ == "__main__":
                 print("程序结束")
             break
         else:
-            price_before_fit_, price_for_self_ = print_()
-            price_before_fit += price_before_fit_
-            price_for_self += price_for_self_
-            print("计算,累加成功!")
+            try:
+                price_before_fit_, price_for_self_ = print_()
+            except KeyError:
+                print("型号不在数据库中,请核对信息")
+                continue
+            except ValueError:
+                print("配件数字输入错误.")
+                continue
+            else:
+                price_before_fit += price_before_fit_
+                price_for_self += price_for_self_
+                print("计算,累加成功!")
 
