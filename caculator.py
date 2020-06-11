@@ -30,9 +30,12 @@ def getdata():
     price_weld_rr = (int(input("请输入焊接标准顶架数量"))) * accessories_internal["weld_rr"]
     price_3_point = (int(input("请输入3点(中控)锁数量"))) * accessories_internal["3_point"]
     price_rubber = (int(input("请输入胶皮数量"))) * accessories_internal["rubber"]
+    num_ = int(input("本单还有几个重复?"))
+    if num_ is None:
+        num_ = 1
     return price_box, price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_draw, price_fic_draw, \
         price_rubber, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy, base_code, \
-        price_strut
+        price_strut, num_
 
 
 # 厚度和平铝计算
@@ -60,7 +63,7 @@ def additional():
 
 # 0 price_box, price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_draw, price_fic_draw, \
 # 9  price_rubber, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy, base_code,
-# 18 price_strut
+# 18 price_strut, num_
 # additional_data是一个二维元组([additional_data],[additional_price])
 def print_():
     order_num = input("请输入订单号:")
@@ -69,7 +72,7 @@ def print_():
         price_after_fold = (sum(data[0:8])+data[15]+data[18]) * box_ratio
     elif data[0] == 0:
         price_after_fold = (data[18]+data[15]+data[16]+sum(data[1:8])) * canopy_ratio
-    price_before_fit = price_after_fold + data[9] + data[13]+data[14]+sum(additional_data[1][:])
+    price_before_fit = (price_after_fold + data[9] + data[13]+data[14]+sum(additional_data[1][:]))*(1+data[19])
     with open(file_name,  mode='a') as f:
         if data[0] != 0:
             print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, round(price_before_fit, 3), data[17], data[0]),
@@ -114,6 +117,8 @@ def print_():
             print("\t附加件有:", end="", file=f)
             for i, j in zip(additional_data[0], additional_data[1]):
                 print(i, ":", "$", j, end=" ", file=f)
+        if data[19] >=0:
+            print("\t共有{}份".format(1+data[19]), end="", file=f)
         print("\n", file=f)
         f.close()
     return price_before_fit, price_for_self
