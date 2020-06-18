@@ -105,7 +105,7 @@ def print_():
             print("+三点${}".format(data[14]), end="", file=f)
         if len(additional_data[0]) != 0:
             for i, j in zip(additional_data[0], additional_data[2]):
-                print("+", i, "$", j, end=" ", file=f)
+                print("+", i, "$", j, end="", file=f)
         if data[0] != 0:
             print(")X0.775", end="", file=f)
         elif data[0] == 0 and data[16] == "0":
