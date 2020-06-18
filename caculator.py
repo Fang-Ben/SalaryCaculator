@@ -24,7 +24,6 @@ def getdata():
     price_rr, rr_name, price_nj, nj_name = rr_nj_data[0], rr_nj_data[1], rr_nj_data[2], rr_nj_data[3]
     price_divi = (int(input("请输入隔板数量:")) + divider_init) * accessories_internal["divider"]
     tube_u = (int(input("请输入U槽/方管/圆管数量:"))) * accessories_internal["U"]
-    price_mesh = (int(input("请输入铝网数量"))) * accessories_internal["mesh"]
     price_strut = strut_init * accessories_internal["strut"]
     price_draw = (int(input("请输入内抽数量"))) * accessories_internal["draw"]
     price_fic_draw = (int(input("FIC抽数量"))) * accessories_internal["fic_draw"]
@@ -35,7 +34,7 @@ def getdata():
     num_ = int(input("本单还有几个重复?"))
     if num_ is None:
         num_ = 1
-    return price_box, price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_draw, price_fic_draw, \
+    return price_box, price_thick, price_fp, price_divi, tube_u, price_door, price_draw, price_fic_draw, \
         price_rubber, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy, base_code, \
         price_strut, num_
 
@@ -53,78 +52,81 @@ def thick_fp_data():
 
 
 def additional():
-    additional_data, additional_price = [], []
+    additional_data1, additional_data2, additional_price1, additional_price2 = [], [], [], []
     while True:
-        input_str = input("还有其他附加件和价格没有列出吗?y/n")
-        if input_str == "y":
-            additional_data.append(input("请输入还有那些附加件?")), additional_price.append(int(input("请输入附加件价格")))
+        input_str = input("1:有折板的附加件。2无折板的附加件。其他键结束")
+        if input_str == "1":
+            additional_data1.append(input("请输入附加件?")), additional_price1.append(int(input("请输入附加件价格")))
+        elif input_str == "2":
+            additional_data2.append(input("请输入附加件?")), additional_price2.append(int(input("请输入附加件价格")))
         else:
             break
-    return additional_data, additional_price
+    return additional_data1, additional_data2, additional_price1, additional_price2
 
 
-# 0 price_box, price_thick, price_fp, price_divi, tube_u, price_mesh, price_door, price_draw, price_fic_draw, \
-# 9  price_rubber, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy, base_code,
-# 18 price_strut, num_
-# additional_data是一个二维元组([additional_data],[additional_price])
+# 0 price_box, price_thick, price_fp, price_divi, tube_u, price_door, price_draw, price_fic_draw, \
+# 8  price_rubber, price_rr, rr_name, nj_name, price_nj, price_weld_rr, price_3_point, price_canopy, base_code,
+# 17 price_strut, num_
+# additional_data是一个二维元组([additional_data1], [additional_data2], [additional_price1], [additional_price2]
 def print_():
     order_num = input("请输入订单号:")
     data, additional_data, price_after_fold = getdata(), additional(), 0
     if data[0] != 0:
-        price_after_fold = (sum(data[0:8])+data[15]+data[18]) * box_ratio
-    elif data[0] ==0 and data[17] == "0":
-        price_after_fold = (sum(data[0:8]) + data[15] + data[18]) * box_ratio
+        price_after_fold = (sum(data[0:7])+data[14]+data[17]+sum(additional_data[2][:])) * box_ratio
+    elif data[0] ==0 and data[16] == "0":
+        price_after_fold = (sum(data[0:7]) + data[14] + data[17]+sum(additional_data[2][:])) * box_ratio
     elif data[0] == 0:
-        price_after_fold = (data[18]+data[15]+data[16]+sum(data[1:8])) * canopy_ratio
-    price_before_fit = (price_after_fold + data[9] + data[13]+data[14]+sum(additional_data[1][:]))*(1+data[19])
+        price_after_fold = (data[17]+data[15]+data[14]+sum(data[1:7])) * canopy_ratio
+    price_before_fit = (price_after_fold + data[8] + data[12] + data[13] + sum(additional_data[3][:]))*(1+data[18])
     with open(file_name,  mode='a') as f:
         if data[0] != 0:
-            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, round(price_before_fit, 3), data[17], data[0]),
+            print("{}\t${}=({} ${}".format(order_num, round(price_before_fit, 3), data[16], data[0]),
                   end="", file=f)
         else:
-            print("订单号{}折板后价格是${}=(系列{}价格${}".format(order_num, round(price_before_fit, 3), data[17], data[16]),
+            print("{}\t${}=({} ${}".format(order_num, round(price_before_fit, 3), data[16], data[15]),
                   end="", file=f)
         if data[1] != 0:
-            print("+2.5mm价格${}".format(data[1]), end="", file=f)
+            print("+2.5${}".format(data[1]), end="", file=f)
         if data[2] != 0:
-            print("+平铝价格${}".format(data[2]), end="", file=f)
+            print("+fp${}".format(data[2]), end="", file=f)
         if data[3] != 0:
-            print("+搁板价格${}".format(data[3]), end="", file=f)
+            print("+隔${}".format(data[3]), end="", file=f)
         if data[4] != 0:
-            print("+(U槽/圆管/方管)总价${}".format(data[4]), end="", file=f)
+            print("+(U/圆/方)${}".format(data[4]), end="", file=f)
         if data[5] != 0:
-            print("+铝网价格${}".format(data[5]), end="", file=f)
+            print("+门${}".format(data[5]), end="", file=f)
         if data[6] != 0:
-            print("+新增门价格${}".format(data[6]), end="", file=f)
+            print("+内抽${}".format(data[6]), end="", file=f)
         if data[7] != 0:
-            print("+内抽价格${}".format(data[8]), end="", file=f)
-        if data[8] != 0:
-            print("+FIC抽价格${}".format(data[9]), end="", file=f)
-        if data[18] != 0:
-            print("撑杆价格${}".format(data[18]), end="", file=f)
+            print("+FIC${}".format(data[7]), end="", file=f)
+        if data[17] != 0:
+            print("撑杆${}".format(data[18]), end="", file=f)
+        if data[14] != 0:
+            print("+三点${}".format(data[14]), end="", file=f)
+        if len(additional_data[0]) != 0:
+            for i, j in zip(additional_data[0], additional_data[2]):
+                print("+", i, "$", j, end=" ", file=f)
         if data[0] != 0:
             print(")X0.775", end="", file=f)
-        elif data[0] == 0 and data[17] == "0":
+        elif data[0] == 0 and data[16] == "0":
             print(")X0.775", end="", file=f)
         else:
             print(")X0.925", end="", file=f)
-        if data[9] != 0:
-            print("+胶皮价格&{}".format(data[9]), end="", file=f)
-        if data[14] != 0:
-            print("+焊接顶架价格${}".format(data[14]), end="", file=f)
-        if data[15] != 0:
-            print("+三点锁价格${}".format(data[15]), end="", file=f)
-        price_for_self = data[10] + data[13]
-        if data[10] != 0:
-            print("\tPLUS!!!!!定制{}${},焊工自切自拿".format(data[11], data[10]), file=f)
+        if data[8] != 0:
+            print("+胶皮${}".format(data[8]), end="", file=f)
         if data[13] != 0:
-            print("\tPLUS!!!!!{}价格${},焊工自切自拿".format(data[12], data[13]), file=f)
-        if len(additional_data[0]) != 0:
+            print("+焊顶架${}".format(data[13]), end="", file=f)
+        price_for_self = data[9] + data[12]
+        if data[9] != 0:
+            print("\tPLUS!!!!!定制{}${},焊工自切自拿".format(data[10], data[9]), end="", file=f)
+        if data[12] != 0:
+            print("\tPLUS!!!!!{}价格${},焊工自切自拿".format(data[11], data[12]), end="", file=f)
+        if len(additional_data[1]) != 0:
             print("\t附加件有:", end="", file=f)
-            for i, j in zip(additional_data[0], additional_data[1]):
+            for i, j in zip(additional_data[1], additional_data[3]):
                 print(i, ":", "$", j, end=" ", file=f)
-        if data[19] >=0:
-            print("\t共有{}份".format(1+data[19]), end="", file=f)
+        if data[18] >= 0:
+            print("\t共有{}份".format(1+data[18]), end="", file=f)
         print("\n", file=f)
         f.close()
     return price_before_fit, price_for_self
