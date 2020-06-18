@@ -100,7 +100,7 @@ def print_():
         if data[7] != 0:
             print("+FIC${}".format(data[7]), end="", file=f)
         if data[17] != 0:
-            print("撑杆${}".format(data[18]), end="", file=f)
+            print("+撑杆${}".format(data[18]), end="", file=f)
         if data[14] != 0:
             print("+三点${}".format(data[14]), end="", file=f)
         if len(additional_data[0]) != 0:

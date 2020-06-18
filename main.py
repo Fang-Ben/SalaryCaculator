@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 
 file_path, file_name = os.getcwd(), datetime.now().strftime("%d%m%y")
-# TODO: conf里面添加None项目 为补门和单独制作顶架作准备.
 if __name__ == "__main__":
     print("程序开始")
     price_before_fit, price_for_self = 0, 0
