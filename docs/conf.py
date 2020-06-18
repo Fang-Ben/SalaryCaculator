@@ -21,5 +21,5 @@ thickness = {"1200": 5, "1500": 9, "1800": 15, "2000": 15, "2001": 15}
 flat_plat = {"1200": 0, "1500": 5, "1800": 10, "2000": 10, "2001": 10}
 box_ratio, canopy_ratio = 0.775, 0.925
 series_name = ["rec", "sts", "fil", "fis", "uis", "dbl", "fid", "dbu", "uil", "alt", "uts", "utti", "ute", "tb", "hdf",
-               "tso", "utt", "ljb", "shoebox"]
+               "tso", "utt", "ljb", "shoebox", "uis", "gb"]
 canopy_name = ["canopy2", "canopy3", "jo2", "jo3", "wt4", "wt5", "mini", "dog", "nofloor"]
