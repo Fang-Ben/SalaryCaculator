@@ -1,4 +1,4 @@
-from docs.conf import box_price, accessories_internal, thickness, flat_plat, box_ratio, canopy_ratio, series_name, \
+from SalaryCaculator.docs.conf import box_price, accessories_internal, thickness, flat_plat, box_ratio, canopy_ratio, series_name, \
     canopy_price, special_name1, special_name2, special_name3, init_divider, init_door, canopy_name, init_strut
 import os
 from datetime import datetime
@@ -72,12 +72,12 @@ def print_():
     order_num = input("请输入订单号:")
     data, additional_data, price_after_fold = getdata(), additional(), 0
     if data[0] != 0:
-        price_after_fold = (sum(data[0:7])+data[14]+data[17]+sum(additional_data[2][:])) * box_ratio
-    elif data[0] ==0 and data[16] == "0":
-        price_after_fold = (sum(data[0:7]) + data[14] + data[17]+sum(additional_data[2][:])) * box_ratio
-    elif data[0] == 0:
-        price_after_fold = (data[17]+data[15]+data[14]+sum(data[1:7])) * canopy_ratio
-    price_before_fit = (price_after_fold + data[8] + data[12] + data[13] + sum(additional_data[3][:]))*(1+data[18])
+        price_after_fold = (sum(data[0:8])+data[14]+data[17]+sum(additional_data[2])) * box_ratio
+    elif data[0] == 0 and data[16] == "0":
+        price_after_fold = (sum(data[0:8]) + data[14] + data[17]+sum(additional_data[2])) * box_ratio
+    elif data[0] == 0 and data[16] in canopy_name:
+        price_after_fold = (data[17]+data[15]+data[14]+sum(data[1:8]) + sum(list(additional_data[2]))) * canopy_ratio
+    price_before_fit = (price_after_fold + data[8] + data[12] + data[13] + sum(list(additional_data[3])))*(1+data[18])
     with open(file_name,  mode='a') as f:
         if data[0] != 0:
             print("{}\t${}=({} ${}".format(order_num, round(price_before_fit, 3), data[16], data[0]),
@@ -100,7 +100,7 @@ def print_():
         if data[7] != 0:
             print("+FIC${}".format(data[7]), end="", file=f)
         if data[17] != 0:
-            print("+撑杆${}".format(data[18]), end="", file=f)
+            print("+撑${}".format(data[18]), end="", file=f)
         if data[14] != 0:
             print("+三点${}".format(data[14]), end="", file=f)
         if len(additional_data[0]) != 0:
