@@ -1,4 +1,5 @@
 # SalaryCaculator
+test1 is the function module,test2.py is the main func.
 input excel columns 
 ['订单号', 'series', 'Length', '2.5mm', 'FP', '隔板', 'U槽/管材', '内铝网', '内抽','外抽', '中控锁', '撑杆', '门', '附加', '附加价格', '胶皮', '焊顶架', 
 '铝网外', '附加.1','附加价格.1', '普通顶架', '承重顶架', '顶架长度', '附加.2', '附加价格.2']
